@@ -14,4 +14,4 @@ workflows:
           orb-path: src/orb.yml
           publish-alpha-version: false
           validate: true
-          store-artifacrt: false
+          store-artifact: false
