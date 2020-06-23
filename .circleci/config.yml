@@ -4,7 +4,36 @@ orbs:
   circleci-cli: circleci/circleci-cli@0.1.8
   orb-tools: circleci/orb-tools@9.1.0
 
+jobs:
+  pre-orb-publish-check:
+    docker:
+      - image: circleci/python:3.7.1
+    steps:
+      - checkout
+      - run:
+          name: Check that this is a master branch commit
+          command: |
+            git clone "$CIRCLE_REPOSITORY_URL" repository
+            cd repository
+            git branch --contains ${CIRCLE_SHA1} | grep "master"
 
+  publish-prod:
+    docker:
+      - image: circleci/python:3.7.1
+    steps:
+      - run:
+          name: Get Tag
+          command: |
+            VERSION=${CIRCLE_TAG//v./}
+            echo 'export VERSION=${CIRCLE_TAG//v./}' >> $BASH_ENV
+      - run: 
+          name: Check Varibales
+          command: |
+            echo $VERSION
+      # - orb-tools/publish:
+      #    checkout: true
+      #    orb-path: src/orb.yml
+      #    orb-ref: orbbant/helloworld@$VERSION
 workflows:
   dev-publish:
     jobs:
@@ -16,3 +45,26 @@ workflows:
           publish-alpha-version: false
           validate: true
           store-artifact: false
+      - pre-orb-publish-check:
+          filters:
+            tags:
+              only: /^v(\d+\.\d+.\d+)$/
+      - approve-prodcution-orb-release:
+          type: approval
+          requires:
+            - pre-orb-publish-check
+          filters:
+            tags:
+              only: /^v(\d+\.\d+.\d+)$/
+      # - orb-tools/publish:
+      #    checkout: true
+      #    orb-path: src/orb.yml
+      #    orb-ref: orbbant/helloworld@version
+      #    filters:
+      #     tags:
+      #       only: /^v(\d+\.\d+.\d+)$/
+      - publish-prod:
+          filters:
+            tags:
+              only: /^v(\d+\.\d+.\d+)$/
+
