@@ -1,13 +1,17 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-# Use a package of configuration called an orb.
+
 orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
-# Orchestrate or schedule a set of jobs
+  circleci-cli: circleci/circleci-cli@0.1.8
+  orb-tools: circleci/orb-tools@9.1.0
+
+
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  dev-publish:
     jobs:
-      - welcome/run
+      - orb-tools/publish-dev:
+          attach-workspace: false
+          orb-name: orbbant/helloworld
+          orb-path: src/orb.yml
+          publish-alpha-version: false
+          validate: true
+          store-artifacrt: false
