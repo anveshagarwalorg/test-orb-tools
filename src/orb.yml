@@ -11,3 +11,4 @@ commands:
           command: |
             echo "Hello World !"
             echo "fourth release"
+            echo "version 0.0.6"
