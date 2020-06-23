@@ -55,8 +55,8 @@ workflows:
       #         ignore: /.*/
       - approve-production-orb-release:
           type: approval
-          requires:
-            - pre-orb-publish-check
+          # requires:
+          #   - pre-orb-publish-check
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
