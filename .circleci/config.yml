@@ -5,7 +5,6 @@ orbs:
   circleci-cli: circleci/circleci-cli@0.1.8
 
 jobs:
-
   publish-prod:
     executor: circleci-cli/default
     steps:
@@ -31,12 +30,14 @@ jobs:
       - orb-tools/publish:
           orb-path: src/orb.yml
           orb-ref: orbbant/helloworld@dev:${CIRCLE_SHA1:0:7}
+      - run:
+          name: Source code of published orb
+          command: circleci orb source orbbant/helloworld@dev:${CIRCLE_SHA1:0:7}
 
 workflows:
   dev-publish:
     jobs:
       - publish-dev
-
   dev-prod:
     jobs:
       - publish-prod:
