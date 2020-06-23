@@ -25,7 +25,7 @@ jobs:
       - run:
           name: Create orb if doesnt exist
           command: |
-            circleci orb create <<parameters.orb-name>> --no-prompt --token $CIRCLE_TOKEN || echo 'orb already exists'
+            circleci orb create orbbant/helloworld --no-prompt --token $CIRCLE_TOKEN || echo 'orb already exists'
       - orb-tools/validate:
           orb-path: src/orb.yml
       - orb-tools/publish:
