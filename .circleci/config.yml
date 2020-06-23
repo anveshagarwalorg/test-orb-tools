@@ -49,13 +49,17 @@ workflows:
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
-      - approve-prodcution-orb-release:
+            branches:
+              ignore: /.*/
+      - approve-production-orb-release:
           type: approval
           requires:
             - pre-orb-publish-check
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
+            branches:
+              ignore: /.*/
       # - orb-tools/publish:
       #    checkout: true
       #    orb-path: src/orb.yml
@@ -64,7 +68,10 @@ workflows:
       #     tags:
       #       only: /^v(\d+\.\d+.\d+)$/
       - publish-prod:
+          requires:
+            - approve-production-orb-release
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
-
+            branches:
+              ignore: /.*/
