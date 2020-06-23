@@ -6,10 +6,10 @@ orbs:
 
 jobs:
   publish-prod:
+    executor: circleci-cli/default
     parameters:
       orb-name:
         type: string
-    executor: circleci-cli/default
     steps:
       - checkout
       - run:
@@ -21,10 +21,10 @@ jobs:
           orb-ref: <<parameteres.orb-name>>@$VERSION
 
   publish-dev:
+    executor: circleci-cli/default
     parameters:
       orb-name:
         type: string
-    executor: circleci-cli/default
     steps:
       - checkout
       - run:
