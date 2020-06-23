@@ -18,7 +18,7 @@ jobs:
             echo 'export VERSION=${CIRCLE_TAG//v/}' >> $BASH_ENV
       - orb-tools/publish:
           orb-path: src/orb.yml
-          orb-ref: <<parameteres.orb-name>>@$VERSION
+          orb-ref: <<parameters.orb-name>>@$VERSION
 
   publish-dev:
     executor: circleci-cli/default
@@ -30,15 +30,15 @@ jobs:
       - run:
           name: Create orb if doesnt exist
           command: |
-            circleci orb create <<parameteres.orb-name>> --no-prompt --token $CIRCLE_TOKEN || echo 'orb already exists'
+            circleci orb create <<parameters.orb-name>> --no-prompt --token $CIRCLE_TOKEN || echo 'orb already exists'
       - orb-tools/validate:
           orb-path: src/orb.yml
       - orb-tools/publish:
           orb-path: src/orb.yml
-          orb-ref: <<parameteres.orb-name>>@dev:${CIRCLE_SHA1:0:7}
+          orb-ref: <<parameters.orb-name>>@dev:${CIRCLE_SHA1:0:7}
       - run:
           name: Source code of published dev orb
-          command: circleci orb source <<parameteres.orb-name>>@dev:${CIRCLE_SHA1:0:7}
+          command: circleci orb source <<parameters.orb-name>>@dev:${CIRCLE_SHA1:0:7}
 
 workflows:
   dev-publish:
