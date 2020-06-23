@@ -29,6 +29,7 @@ jobs:
           name: Check Varibales
           command: |
             echo $VERSION
+            echo 'orbbant/helloworld@{$VERSION}'
       # - orb-tools/publish:
       #    checkout: true
       #    orb-path: src/orb.yml
