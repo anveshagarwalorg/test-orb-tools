@@ -71,8 +71,8 @@ workflows:
       #     tags:
       #       only: /^v(\d+\.\d+.\d+)$/
       - publish-prod:
-          requires:
-            - approve-production-orb-release
+          # requires:
+          #   - approve-production-orb-release
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
