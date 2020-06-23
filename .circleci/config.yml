@@ -15,7 +15,7 @@ jobs:
           command: |
             git clone "$CIRCLE_REPOSITORY_URL" repository
             cd repository
-            git branch --contains ${CIRCLE_SHA1} | grep "master"
+            git branch --contains ${CIRCLE_SHA1} | grep "orb-setup-and-testing"
 
   publish-prod:
     docker:
