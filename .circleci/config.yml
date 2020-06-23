@@ -5,9 +5,11 @@ orbs:
   circleci-cli: circleci/circleci-cli@0.1.8
 
 jobs:
-
   publish-prod:
     executor: circleci-cli/default
+    parameters:
+      orb-name:
+        type: string
     steps:
       - checkout
       - run:
@@ -15,24 +17,39 @@ jobs:
           command: |
             echo 'export VERSION=${CIRCLE_TAG//v/}' >> $BASH_ENV
       - orb-tools/publish:
-         orb-path: src/orb.yml
-         orb-ref: orbbant/helloworld@$VERSION
+          orb-path: src/orb.yml
+          orb-ref: <<parameters.orb-name>>@$VERSION
+
+  publish-dev:
+    executor: circleci-cli/default
+    parameters:
+      orb-name:
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: Create orb if doesnt exist
+          command: |
+            circleci orb create <<parameters.orb-name>> --no-prompt --token $CIRCLE_TOKEN || echo 'orb already exists'
+      - orb-tools/validate:
+          orb-path: src/orb.yml
+      - orb-tools/publish:
+          orb-path: src/orb.yml
+          orb-ref: <<parameters.orb-name>>@dev:${CIRCLE_SHA1:0:7}
+      - run:
+          name: Source code of published dev orb
+          command: circleci orb source <<parameters.orb-name>>@dev:${CIRCLE_SHA1:0:7}
 
 workflows:
   dev-publish:
     jobs:
-      - orb-tools/publish-dev:
-          checkout: true
-          attach-workspace: false
+      - publish-dev:
           orb-name: orbbant/helloworld
-          orb-path: src/orb.yml
-          publish-alpha-version: false
-          validate: true
-          store-artifact: false
 
-  dev-prod:
+  prod-publish:
     jobs:
       - publish-prod:
+          orb-name: orbbant/helloworld
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
