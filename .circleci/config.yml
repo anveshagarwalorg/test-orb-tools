@@ -29,22 +29,22 @@ jobs:
           name: Check Varibales
           command: |
             echo $VERSION
-            echo 'orbbant/helloworld@{$VERSION}'
+            echo orbbant/helloworld@$VERSION
       # - orb-tools/publish:
       #    checkout: true
       #    orb-path: src/orb.yml
       #    orb-ref: orbbant/helloworld@$VERSION
 workflows:
-  dev-publish:
-    jobs:
-      - orb-tools/publish-dev:
-          checkout: true
-          attach-workspace: false
-          orb-name: orbbant/helloworld
-          orb-path: src/orb.yml
-          publish-alpha-version: false
-          validate: true
-          store-artifact: false
+  # dev-publish:
+  #   jobs:
+  #     - orb-tools/publish-dev:
+  #         checkout: true
+  #         attach-workspace: false
+  #         orb-name: orbbant/helloworld
+  #         orb-path: src/orb.yml
+  #         publish-alpha-version: false
+  #         validate: true
+  #         store-artifact: false
 
   dev-prod:
     jobs:
@@ -54,15 +54,15 @@ workflows:
       #         only: /^v(\d+\.\d+.\d+)$/
       #       branches:
       #         ignore: /.*/
-      - approve-production-orb-release:
-          type: approval
-          # requires:
-          #   - pre-orb-publish-check
-          filters:
-            tags:
-              only: /^v(\d+\.\d+.\d+)$/
-            branches:
-              ignore: /.*/
+      # - approve-production-orb-release:
+      #     type: approval
+      #     # requires:
+      #     #   - pre-orb-publish-check
+      #     filters:
+      #       tags:
+      #         only: /^v(\d+\.\d+.\d+)$/
+      #       branches:
+      #         ignore: /.*/
       # - orb-tools/publish:
       #    checkout: true
       #    orb-path: src/orb.yml
