@@ -18,9 +18,18 @@ jobs:
          orb-path: src/orb.yml
          orb-ref: orbbant/helloworld@$VERSION
 
+  create-orb:
+    executor: circleci-cli/default
+    steps:
+      - run:
+          name: Create orb if doesnt exist
+          command: |
+            circleci orb create orbbant/helloworld --no-prompt --token $CIRCLE_TOKEN || echo 'orb already exists'
+
 workflows:
   dev-publish:
     jobs:
+      - create-orb
       - orb-tools/publish-dev:
           checkout: true
           attach-workspace: false
@@ -29,7 +38,8 @@ workflows:
           publish-alpha-version: false
           validate: true
           store-artifact: false
-
+          requires:
+            - create-orb
   dev-prod:
     jobs:
       - publish-prod:
