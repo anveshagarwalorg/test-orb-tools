@@ -1,10 +1,38 @@
 version: 2.1
 
+
 description: |
   A simple "Hello, World!" orb
 
+
+display:
+  source_url: https://github.com/anveshagarwalorg/test-orb-tools
+
+
+examples:
+  saysomething:
+    description: |
+      Echoes the first words of progamming
+    usage: 
+      version: 2.1
+
+      orbs: 
+        sample-orb: orbbant/helloworld@0.0.9
+      jobs:
+        sample-job:
+          steps:
+            - sample-orbs/saysomething
+      
+      workflows:
+        sample-workflow:
+          jobs:
+            - sample-job
+            
+
 commands:
-  expire:
+  saysomething:
+    description: |
+      Echoes the first words of progamming
     steps:
       - run:
           name: Echo Hello world
@@ -12,3 +40,4 @@ commands:
             echo "Hello World !"
             echo "fourth release"
             echo "version 0.0.6"
+            echo "version 0.0.9"
