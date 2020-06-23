@@ -11,7 +11,7 @@ workflows:
       - orb-tools/publish-dev:
           attach-workspace: false
           orb-name: orbbant/helloworld
-          orb-path: orb.yml
+          orb-path: /src/orb.yml
           publish-alpha-version: false
           validate: true
           store-artifact: false
