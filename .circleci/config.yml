@@ -46,7 +46,7 @@ workflows:
       - publish-dev:
           orb-name: orbbant/helloworld
 
-  dev-prod:
+  prod-publish:
     jobs:
       - publish-prod:
           orb-name: orbbant/helloworld
