@@ -12,34 +12,42 @@ display:
 examples:
   saysomething:
     description: |
-      Echoes the first words of progamming
+      Echoes what you want
     usage: 
       version: 2.1
 
       orbs: 
-        sample-orb: orbbant/helloworld@0.0.9
+        sample-orb: orbbant/helloworld@0.1.0
       jobs:
         sample-job:
+          parameters:
+            text:
+              type: string
           docker:
             - image: circleci/python:3.7.1
           steps:
-            - sample-orbs/saysomething
+            - sample-orbs/saysomething:
+                text: <<parameters.text>>
       
       workflows:
         sample-workflow:
           jobs:
-            - sample-job
+            - sample-job:
+                text: Hi ia m first orb
+
             
 
 commands:
   saysomething:
     description: |
-      Echoes the first words of progamming
+      Echoes what you want
+    parameters:
+      text:
+        description:
+          "Text to echo"
+        type: string
     steps:
       - run:
-          name: Echo Hello world
+          name: Echo what you want
           command: |
-            echo "Hello World !"
-            echo "fourth release"
-            echo "version 0.0.6"
-            echo "version 0.0.9"
+            echo <<parameters.text>>
