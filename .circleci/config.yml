@@ -34,6 +34,7 @@ jobs:
             echo $ECODE
             if [ -z "$ECODE" ]
             then
+                echo "ECODE exists"
                 if [ $ECODE -eq 255 ]
                 then
                     echo "INSIDE"
