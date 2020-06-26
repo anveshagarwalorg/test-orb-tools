@@ -35,7 +35,8 @@ jobs:
             then
                 echo "<<parameters.orb-name>> already exists"
                 exit 0
-            else
+            elif [[ -z "${ECODE}" ]]
+            then
                 echo "Orb could not be created for some unknown reason.
                 Exited with exit_code $ECODE. Try again"
             fi
@@ -66,16 +67,16 @@ workflows:
   dev-publish:
     jobs:
       - create-orb-if-not-exist:
-          orb-name: orbbant/helloworld19
+          orb-name: orbbant/helloworld22
       - publish-dev:
-          orb-name: orbbant/helloworld19
+          orb-name: orbbant/helloworld22
           requires:
             - create-orb-if-not-exist
 
   prod-publish:
     jobs:
       - publish-prod:
-          orb-name: orbbant/helloworld19
+          orb-name: orbbant/helloworld22
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
