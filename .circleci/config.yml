@@ -66,16 +66,16 @@ workflows:
   dev-publish:
     jobs:
       - create-orb-if-not-exist:
-          orb-name: orbbant/helloworld18
+          orb-name: orbbant/helloworld19
       - publish-dev:
-          orb-name: orbbant/helloworld18
+          orb-name: orbbant/helloworld19
           requires:
             - create-orb-if-not-exist
 
   prod-publish:
     jobs:
       - publish-prod:
-          orb-name: orbbant/helloworld18
+          orb-name: orbbant/helloworld19
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
