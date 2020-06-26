@@ -21,7 +21,7 @@ jobs:
           orb-ref: <<parameters.orb-name>>@$VERSION
 
   create-orb-if-not-exist:
-    executor: orb-tools/alpine
+    executor: circleci-cli/default
     parameters:
       orb-name:
         type: string
