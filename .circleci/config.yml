@@ -30,14 +30,17 @@ jobs:
       - run:
           name: Create orb if doesnt exist
           command: |
-            circleci orb create <<parameters.orb-name>> --token $CIRCLE_TOKEN --no-prompt 2>/dev/null
-            VAR=$?
-            echo $VAR
-            if [ $VAR -eq 255 ]
+            circleci orb create <<parameters.orb-name>> --token $CIRCLE_TOKEN --no-prompt || export ECODE="$?"
+            echo $ECODE
+            if [ -z "$ECODE" ]
             then
-                echo "INSIDE"
-                echo "orbbant/helloworld13 already exists"
-                exit 0
+                if [ $ECODE -eq 255 ]
+                then
+                    echo "INSIDE"
+                    echo "$ECODE"
+                    echo "orbbant/helloworld13 already exists"
+                    exit 0
+                fi
             fi
 
   publish-dev:
@@ -66,16 +69,16 @@ workflows:
   dev-publish:
     jobs:
       - create-orb-if-not-exist:
-          orb-name: orbbant/helloworld17
+          orb-name: orbbant/helloworld18
       - publish-dev:
-          orb-name: orbbant/helloworld17
+          orb-name: orbbant/helloworld18
           requires:
             - create-orb-if-not-exist
 
   prod-publish:
     jobs:
       - publish-prod:
-          orb-name: orbbant/helloworld17
+          orb-name: orbbant/helloworld18
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
