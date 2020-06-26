@@ -31,15 +31,13 @@ jobs:
           name: Create orb if doesnt exist
           command: |
             circleci orb create <<parameters.orb-name>> --token $CIRCLE_TOKEN --no-prompt || export ECODE="$?"
-            echo "ECDOE is set"
-            echo "ECHO is $ECODE"
-
             if [ $ECODE -eq 255 ]
             then
-                echo "INSIDE"
-                echo "ECODE inside is $ECODE"
-                echo "orbbant/helloworld13 already exists"
+                echo "<<parameters.orb-name>> already exists"
                 exit 0
+            else
+                echo "Orb could not be created for some unknown reason.
+                Exited with exit_code $ECODE. Try again"
             fi
 
   publish-dev:
