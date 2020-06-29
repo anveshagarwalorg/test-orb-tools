@@ -65,7 +65,7 @@ jobs:
 
 workflows:
 
-  publish-dev:
+  publish:
     jobs:
       - create-orb-if-not-exist:
           orb-name: orbbant/helloworld
@@ -73,16 +73,6 @@ workflows:
           orb-name: orbbant/helloworld
           requires:
             - create-orb-if-not-exist
-
-  publish-prod:
-    jobs:
-      - create-orb-if-not-exist:
-          orb-name: orbbant/helloworld
-          filters:
-            tags:
-              only: /^v(\d+\.\d+.\d+)$/
-            branches:
-              ignore: /.*/
       - publish-prod:
           requires: 
             - create-orb-if-not-exist
