@@ -9,13 +9,8 @@ jobs:
     executor: circleci-cli/default
     steps:
       - checkout
-      - run: ls
       - attach_workspace:
           at: workspace
-      - run: |
-          ls
-          cd workspace
-          ls
       - run:
           name: Generate Version Tag
           command: echo 'export VERSION=${CIRCLE_TAG//v/}' >> $BASH_ENV
