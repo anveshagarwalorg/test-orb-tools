@@ -12,12 +12,16 @@ jobs:
       - run: ls
       - attach_workspace:
           at: workspace
-      - run: ls
+      - run: |
+          ls
+          cd workspace
+          ls
       - run:
           name: Generate Version Tag
           command: echo 'export VERSION=${CIRCLE_TAG//v/}' >> $BASH_ENV
       - orb-tools/publish:
           orb-ref: orbbant/helloworld@$VERSION
+          orb-path: workspace/orb.yml
 
 workflows:
   build-and-deploy:
