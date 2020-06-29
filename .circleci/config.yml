@@ -81,6 +81,8 @@ workflows:
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
+            branches:
+              ignore: /.*/
       - publish-prod:
           requires: 
             - create-orb-if-not-exist
