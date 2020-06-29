@@ -65,17 +65,22 @@ jobs:
 
 workflows:
 
-  publish:
+  publish-dev:
+    jobs:
+      - create-orb-if-not-exist:
+          orb-name: orbbant/helloworld
+      - publish-dev:
+          orb-name: orbbant/helloworld
+          requires:
+            - create-orb-if-not-exist
+
+  publish-prod:
     jobs:
       - create-orb-if-not-exist:
           orb-name: orbbant/helloworld
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
-      - publish-dev:
-          orb-name: orbbant/helloworld
-          requires:
-            - create-orb-if-not-exist
       - publish-prod:
           requires: 
             - create-orb-if-not-exist
