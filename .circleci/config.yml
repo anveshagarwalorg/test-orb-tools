@@ -69,6 +69,9 @@ workflows:
     jobs:
       - create-orb-if-not-exist:
           orb-name: orbbant/helloworld
+          filters:
+            tags:
+              only: /^v(\d+\.\d+.\d+)$/
       - publish-dev:
           orb-name: orbbant/helloworld
           requires:
