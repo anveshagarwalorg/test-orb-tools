@@ -22,6 +22,7 @@ workflows:
   build-and-deploy:
     jobs:
       - orb-tools/pack:
+        # validation is done inside app
           filters:
             tags:
               only: /^v(\d+\.\d+.\d+)$/
