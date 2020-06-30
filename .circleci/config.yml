@@ -9,11 +9,14 @@ jobs:
     executor: circleci-cli/default
     steps:
       - checkout
+      - attach_workspace:
+          at: workspace
       - run:
           name: Generate Version Tag
           command: echo 'export VERSION=${CIRCLE_TAG//v/}' >> $BASH_ENV
       - orb-tools/publish:
           orb-ref: orbbant/helloworld@$VERSION
+          orb-path: workspace/orb.yml
 
 workflows:
   build-and-deploy:
