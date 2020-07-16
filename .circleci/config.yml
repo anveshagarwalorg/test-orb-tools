@@ -20,7 +20,7 @@ jobs:
           orb-path: src/orb.yml
           orb-ref: <<parameters.orb-name>>@$VERSION
 
-  publish-dev:
+  create-orb-if-not-exist:
     executor: circleci-cli/default
     parameters:
       orb-name:
@@ -30,7 +30,30 @@ jobs:
       - run:
           name: Create orb if doesnt exist
           command: |
-            circleci orb create <<parameters.orb-name>> --no-prompt --token $CIRCLE_TOKEN || echo 'orb already exists'
+            circleci orb create <<parameters.orb-name>> --token $CIRCLE_TOKEN --no-prompt || export ECODE="$?"
+            if [ "$ECODE" -eq 255 ]
+            then
+                echo "<<parameters.orb-name>> already exists"
+                exit 0
+            elif [ -n "$ECODE" ]
+            then
+                echo "value of ecode is $ECODE"
+                echo "Orb could not be created for some unknown reason.
+                Exited with exit_code $ECODE. Try again"
+            fi
+
+  publish-dev:
+    executor: circleci-cli/default
+    parameters:
+      orb-name:
+        type: string
+    steps:
+      - checkout
+      # - run:
+      #     name: Create orb if doesnt exist
+      #     command: |
+      #       circleci orb create <<parameters.orb-name>> --no-prompt --token $CIRCLE_TOKEN || echo 'orb already exists'
+      # check other commit
       - orb-tools/validate:
           orb-path: src/orb.yml
       - orb-tools/publish:
@@ -41,14 +64,21 @@ jobs:
           command: circleci orb source <<parameters.orb-name>>@dev:${CIRCLE_SHA1:0:7}
 
 workflows:
-  dev-publish:
+
+  publish:
     jobs:
+      - create-orb-if-not-exist:
+          orb-name: orbbant/helloworld
+          filters:
+            tags:
+              only: /^v(\d+\.\d+.\d+)$/
       - publish-dev:
           orb-name: orbbant/helloworld
-
-  prod-publish:
-    jobs:
+          requires:
+            - create-orb-if-not-exist
       - publish-prod:
+          requires: 
+            - create-orb-if-not-exist
           orb-name: orbbant/helloworld
           filters:
             tags:
